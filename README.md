@@ -1,5 +1,7 @@
 # digit_ros
 wrapper ros for tactile sensor digit
+
+
 ## Setting up Your Environment
 
 Create a ROS workspace (if you already have one, you can skip this step):
@@ -37,4 +39,18 @@ cd digit-depth
 pip install -r requirements.txt
 pip install .
 ```
+
+## How To
+
+### rgb images
+
+```bash
+roslaunch digit_ros digit_depth.launch 
+```
+change your id_sensor with args, default is D20928
+```bash
+roslaunch digit_ros digit_depth.launch id_sensor:=D20928
+```
+
+
 

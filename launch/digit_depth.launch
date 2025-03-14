@@ -1,0 +1,7 @@
+<launch>
+    <arg name="venv" value="$(find digit_ros)/scripts/digit_venv/bin/python" />
+
+    <node pkg="digit_ros" type="main.py" name="digit_ros" launch-prefix="$(arg venv)" output="screen">
+    </node>
+
+</launch>

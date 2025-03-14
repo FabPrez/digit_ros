@@ -1,17 +1,17 @@
 # digit_ros
-wrapper ros for tactile sensor digit
+Wrapper ROS for the DIGIT tactile sensor.
 
+## Setting up Your Environment 
 
-## Setting up Your Environment
-
-Create a ROS workspace (if you already have one, you can skip this step):
+Create a ROS workspace (if you already have one, you can skip this step):  
 
 ```bash
 mkdir -p ~/digit_ws/src
 cd ~/digit_ws
 catkin init
 ```
-Then:
+
+Then:  
 
 ```bash
 cd ~/digit_ws/src
@@ -29,7 +29,7 @@ catkin build -cs --mem-limit 50%
 source devel/setup.bash
 ```
 
-Create the virtual environment and install the requirements:
+Create the Virtual Environment and Installing Dependencies
 
 ```bash
 cd src/digit_ros/scripts
@@ -40,17 +40,27 @@ pip install -r requirements.txt
 pip install .
 ```
 
-## How To
-
-### rgb images
+### Handling Installation Failures
+If the installation fails due to issues with `wheel`, `setuptools`, or `pip`, upgrade them first and then retry:
 
 ```bash
-roslaunch digit_ros digit_depth.launch 
+pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+pip install .
 ```
-change your id_sensor with args, default is D20928
+
+---
+
+## How To
+
+### RGB Images 
+
+```bash
+roslaunch digit_ros digit_depth.launch
+```
+
+You can change your sensor ID using arguments. The default is `D20928`:  
+
 ```bash
 roslaunch digit_ros digit_depth.launch id_sensor:=D20928
 ```
-
-
-

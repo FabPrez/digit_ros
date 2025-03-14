@@ -17,7 +17,7 @@ git clone https://github.com/FabPrez/digit_ros.git
 mkdir rosinstall
 cp digit_ros/digit_ros.repos rosinstall/digit_ros.repos
 cd digit_ros/scripts
-vcs import < rosinstall/digit_ros.repos
+vcs import < ~/digit_ws/src/rosinstall/digit_ros.repos
 cd ~/digit_ws
 vcs pull src
 sudo apt update && sudo apt upgrade -y

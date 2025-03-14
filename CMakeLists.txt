@@ -33,6 +33,6 @@ include_directories(
 )
 
 
-catkin_install_python(PROGRAMS scripts/main.py
+catkin_install_python(PROGRAMS scripts/rgb_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

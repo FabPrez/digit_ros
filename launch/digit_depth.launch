@@ -1,7 +1,12 @@
 <launch>
     <arg name="venv" value="$(find digit_ros)/scripts/digit_venv/bin/python" />
+    <arg name="rviz" default="true" />
+    <arg name="id_sensor" default="D20928" />
 
-    <node pkg="digit_ros" type="main.py" name="digit_ros" launch-prefix="$(arg venv)" output="screen">
+    <node pkg="digit_ros" type="rgb_node.py" name="digit_ros" launch-prefix="$(arg venv)" output="screen">
+        <param name="id_sensor" value="$(arg id_sensor)" />
     </node>
+
+    <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz_digit_$(arg id_sensor)" args="-d $(find digit_ros)/config/one_digit.rviz"/>  
 
 </launch>

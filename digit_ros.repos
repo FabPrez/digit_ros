@@ -1,0 +1,4 @@
+repositories:
+  digit-depth:
+    type: git
+    url: https://github.com/FabPrez/digit-depth.git

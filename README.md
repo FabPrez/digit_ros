@@ -33,6 +33,7 @@ Create the virtual environment and install the requirements:
 cd src/digit_ros/scripts
 python3 -m venv digit_venv
 source digit_venv/bin/activate
+cd digit-depth
 pip install -r requirements.txt
 pip install .
 ```

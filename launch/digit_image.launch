@@ -5,7 +5,7 @@
     <arg name="config_file_name" value="digit_$(arg id_sensor).yaml" />
 
     <group ns="$(arg id_sensor)">
-        <node pkg="digit_ros" type="digit_depth_pub.py" name="digit_depth_pub" launch-prefix="$(arg venv)" output="screen">
+        <node pkg="digit_ros" type="digit_image_pub.py" name="digit_image_pub" launch-prefix="$(arg venv)" output="screen">
             <param name="config_file_name" value="$(arg config_file_name)" />
         </node>
     </group>

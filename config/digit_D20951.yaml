@@ -13,7 +13,7 @@ hydra:
 
 # DIGIT config
 sensor:
-  serial_num: "D20928"
+  serial_num: "D20951"
   resolution: "QVGA" # QVGA, VGA
   fps : 30 # Max is 60
   T_cam_offset: [ [ 2.22e-16, 2.22e-16, -1.00e+00, 0.00e+00 ],

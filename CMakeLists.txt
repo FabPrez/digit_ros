@@ -33,6 +33,6 @@ include_directories(
 )
 
 
-catkin_install_python(PROGRAMS scripts/rgb_node.py
+catkin_install_python(PROGRAMS scripts/digit_image_pub.py scripts/digit_depth_pub.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

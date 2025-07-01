@@ -1,5 +1,5 @@
 import hydra
-import open3d as o3d
+# import open3d as o3d
 from pathlib import Path
 from digit_depth.third_party import geom_utils
 from digit_depth.digit import DigitSensor
@@ -14,7 +14,7 @@ import rospy
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, PointField
 import std_msgs.msg
-import numpy as np
+# import numpy as np
 
 
 seed = 42
@@ -60,7 +60,7 @@ def show_point_cloud(cfg):
     digit_call = digit()
 
     #setup publisher
-    pub = rospy.Publisher('/pointcloud_topic', PointCloud2, queue_size=10)
+    pub = rospy.Publisher('/digit/pointcloud', PointCloud2, queue_size=10)
 
     while True:
         frame = digit_call.get_frame()
@@ -80,7 +80,7 @@ def show_point_cloud(cfg):
         # clouds = geom_utils.init_points_to_clouds(clouds=[copy.deepcopy(cloud)], points3d=[points3d])
         # vis_utils.visualize_geometries_o3d(vis3d=vis3d, clouds=clouds)
 
-        # Publish point cloud to ROS
+        # Create ROS message for PointCloud2
         header = std_msgs.msg.Header()
         header.stamp = rospy.Time.now()
         header.frame_id = "yumi_base_link"  # Set appropriate TF frame. MODIFY THIS AS NEEDED
@@ -92,7 +92,7 @@ def show_point_cloud(cfg):
             PointField('x', 0, PointField.FLOAT32, 1),
             PointField('y', 4, PointField.FLOAT32, 1),
             PointField('z', 8, PointField.FLOAT32, 1),
-            #PointField('rgba', 12, PointField.UINT32, 1), Potentially need to add more field for RGB
+            #PointField('rgba', 12, PointField.UINT32, 1), Potentially need to add one more field for RGB or intensity
         ] 
 
         point_cloud = pc2.create_cloud(header, fields, points)
@@ -101,8 +101,6 @@ def show_point_cloud(cfg):
         pub.publish(point_cloud)
 
         return point_cloud
-
-#TODO: Add ROS publisher function
 
 if __name__ == "__main__":
     rospy.init_node('pointcloud_publisher', anonymous=True)

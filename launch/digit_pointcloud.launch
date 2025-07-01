@@ -1,0 +1,14 @@
+<launch>
+    <arg name="venv" value="$(find digit_ros)/scripts/digit_venv/bin/python" />
+    <arg name="rviz" default="true" />
+    <arg name="id_sensor" default="D20928" />
+    <arg name="config_file_name" value="digit_$(arg id_sensor).yaml" />
+
+    <group ns="$(arg id_sensor)">
+        <node pkg="digit_ros" type="digit_pointcloud_pub.py" name="digit_pointcloud_pub" launch-prefix="$(arg venv)" output="screen">
+            <param name="config_file_name" value="$(arg config_file_name)" />
+        </node>
+    </group>
+
+    <node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz_digit_$(arg id_sensor)" args="-d $(find digit_ros)/config/one_digit.rviz"/>  
+</launch>

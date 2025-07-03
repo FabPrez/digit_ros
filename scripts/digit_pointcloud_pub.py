@@ -22,6 +22,8 @@ torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 base_path = Path(__file__).parent.parent.parent.resolve()
 
+print('ciao0')
+
 
 @hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def show_point_cloud(cfg):
@@ -36,6 +38,7 @@ def show_point_cloud(cfg):
             })
     vis3d = vis_utils.Visualizer3d(base_path=base_path, view_params=view_params)
 
+    print('ciao2')
     # projection params
     proj_mat = torch.tensor(cfg.sensor.P)
     model_path = find_recent_model(f"{base_path}/models")
@@ -62,7 +65,9 @@ def show_point_cloud(cfg):
     #setup publisher
     pub = rospy.Publisher('/digit/pointcloud', PointCloud2, queue_size=10)
 
+    print('ciao3')
     while True:
+        print('ciao4')
         frame = digit_call.get_frame()
         img_np = preproc_mlp(frame)
         img_np = model(img_np).detach().cpu().numpy()
@@ -103,6 +108,6 @@ def show_point_cloud(cfg):
         return point_cloud
 
 if __name__ == "__main__":
-    rospy.init_node('pointcloud_publisher', anonymous=True)
-
+    rospy.init_node('digit_pointcloud', anonymous=True)
+    print('ciao1')
     show_point_cloud()

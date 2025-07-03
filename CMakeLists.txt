@@ -32,7 +32,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-
-catkin_install_python(PROGRAMS scripts/digit_image_pub.py scripts/digit_depth_pub.py
+catkin_install_python(PROGRAMS scripts/digit_image_pub.py scripts/digit_depth_pub.py scripts/digit_pointcloud_pub.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

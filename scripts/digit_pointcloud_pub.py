@@ -1,12 +1,11 @@
-import hydra
-# import open3d as o3d
+import os
+from hydra import initialize, compose
 from pathlib import Path
 from digit_depth.third_party import geom_utils
 from digit_depth.digit import DigitSensor
 from digit_depth.train import MLP
 from digit_depth.train.prepost_mlp import *
 from attrdict import AttrDict
-from digit_depth.third_party import vis_utils
 from digit_depth.handlers import find_recent_model, find_background_img
 
 # import ROS stuff
@@ -14,34 +13,25 @@ import rospy
 import sensor_msgs.point_cloud2 as pc2
 from sensor_msgs.msg import PointCloud2, PointField
 import std_msgs.msg
-# import numpy as np
-
 
 seed = 42
 torch.seed = seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-base_path = Path(__file__).parent.parent.parent.resolve()
+relative_config_path = os.path.join('..','config')
 
-print('ciao0')
+# Build config file path to retrieve .yaml file
+current_dir = os.path.dirname(os.path.abspath(__file__))
+base_path = os.path.abspath(os.path.join(current_dir, 'digit-depth'))
+model_path_weights = os.path.abspath(os.path.join(current_dir, 'digit-depth','models'))
 
+# print('base_path:', base_path)
+# print('model_path_weights:', model_path_weights)
 
-@hydra.main(config_path=f"{base_path}/config", config_name="digit.yaml", version_base=None)
 def show_point_cloud(cfg):
-    # view_params = AttrDict({'fov': 60, 'front': [-0.1, 0.1, 0.1], 'lookat': [
-    #     -0.001, -0.01, 0.01], 'up': [0.04, -0.05, 0.190], 'zoom': 2.5})
-    view_params = AttrDict({
-                "fov": 60,
-                "front": [-0.3, 0.0, 0.5],
-                "lookat": [-0.001, 0.001,-0.001],
-                "up": [0.0, 0.0, 0.50],
-                "zoom": 0.5,
-            })
-    vis3d = vis_utils.Visualizer3d(base_path=base_path, view_params=view_params)
-
-    print('ciao2')
+    
     # projection params
     proj_mat = torch.tensor(cfg.sensor.P)
-    model_path = find_recent_model(f"{base_path}/models")
+    model_path = find_recent_model(f"{model_path_weights}")
     model = torch.load(model_path).to(device)
     model.eval()
     # base image depth map
@@ -62,11 +52,10 @@ def show_point_cloud(cfg):
     digit = DigitSensor(cfg.sensor.fps, cfg.sensor.resolution, cfg.sensor.serial_num)
     digit_call = digit()
 
-    #setup publisher
-    pub = rospy.Publisher('/digit/pointcloud', PointCloud2, queue_size=10)
+    # setup publisher
+    pub = rospy.Publisher('pointcloud', PointCloud2, queue_size=2)
 
-    print('ciao3')
-    while True:
+    while not rospy.is_shutdown():
         print('ciao4')
         frame = digit_call.get_frame()
         img_np = preproc_mlp(frame)
@@ -88,10 +77,11 @@ def show_point_cloud(cfg):
         # Create ROS message for PointCloud2
         header = std_msgs.msg.Header()
         header.stamp = rospy.Time.now()
-        header.frame_id = "yumi_base_link"  # Set appropriate TF frame. MODIFY THIS AS NEEDED
+        header.frame_id = "map"  # Set appropriate TF frame. MODIFY THIS AS NEEDED
 
         # Converts from Point3d to PointCloud2 format. 
         points = [(point[0], point[1], point[2]) for point in points3d]
+        print(points)
 
         fields = [
             PointField('x', 0, PointField.FLOAT32, 1),
@@ -105,9 +95,13 @@ def show_point_cloud(cfg):
         # Publish the point cloud to the ROS topic
         pub.publish(point_cloud)
 
-        return point_cloud
-
 if __name__ == "__main__":
+    # Retrieve config file name from ROS parameter server. Provides default value if not set
+    config_file_name = rospy.get_param("~config_file_name", "digit_D20951.yaml")
+    
+    with initialize(config_path=relative_config_path):
+        cfg = compose(config_name=config_file_name)
+
     rospy.init_node('digit_pointcloud', anonymous=True)
-    print('ciao1')
-    show_point_cloud()
+
+    show_point_cloud(cfg)

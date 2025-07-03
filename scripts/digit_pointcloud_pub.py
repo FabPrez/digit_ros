@@ -80,14 +80,15 @@ def show_point_cloud(cfg):
         header.frame_id = "map"  # Set appropriate TF frame. MODIFY THIS AS NEEDED
 
         # Converts from Point3d to PointCloud2 format. 
-        points = [(point[0], point[1], point[2]) for point in points3d]
-        print(points)
+        points = list(zip(*points3d.tolist()))
+        # print(points)
+        # print(points3d.shape)
 
         fields = [
             PointField('x', 0, PointField.FLOAT32, 1),
             PointField('y', 4, PointField.FLOAT32, 1),
             PointField('z', 8, PointField.FLOAT32, 1),
-            #PointField('rgba', 12, PointField.UINT32, 1), Potentially need to add one more field for RGB or intensity
+            # PointField('rgba', 12, PointField.UINT32, 1), # Potentially need to add one more field for RGB or intensity
         ] 
 
         point_cloud = pc2.create_cloud(header, fields, points)
